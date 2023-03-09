@@ -110,16 +110,20 @@
       </div>
       <div class="ts-container is-very-narrow">
         <div class="ts-space"></div>
-        <label class="ts-chip is-toggle">
-          <input type="radio" name="ml" value="all" onclick="${() => setColaFilter('all')}" checked="${colaFilter == 'all'}" />
-          <div class="content">全部</div>
-        </label>
-        ${mlFilter.map(x => html`
-        <label class="ts-chip is-toggle" style="margin-left: 4px">
-          <input type="radio" name="ml" value="${x}" onclick="${() => setColaFilter(x)}" checked="${colaFilter == x}" />
-          <div class="content">${x}</div>
-        </label>
-        `)}
+        ${feed.length ? html`
+        <div class="ts-wrap is-compact">
+          <label class="ts-chip is-toggle">
+            <input type="radio" name="ml" value="all" onclick="${() => setColaFilter('all')}" checked="${colaFilter == 'all'}" />
+            <div class="content">全部</div>
+          </label>
+          ${mlFilter.map(x => html`
+          <label class="ts-chip is-toggle">
+            <input type="radio" name="ml" value="${x}" onclick="${() => setColaFilter(x)}" checked="${colaFilter == x}" />
+            <div class="content">${x}</div>
+          </label>
+          `)}
+        </div>
+        `: ``}
         <div class="ts-space"></div>
         ${feed.length
           ? feed
