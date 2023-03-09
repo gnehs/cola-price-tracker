@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { executablePath } from 'puppeteer';
-import fs from 'fs';
+import fs from 'fs-extra';
 import fetch from 'node-fetch';
 import crypto from 'crypto';
 
@@ -73,8 +73,9 @@ function hash(str, salt = 'salt') {
         box = parseInt(name.match(/(\d+)(箱|組)/)[1])
       } catch (e) { }
       let qty = parseInt(name.match(/(\d+)入/)[1])
+      let totalQty = box * qty
       let pricePerMl = parseFloat((price / (ml * box * qty)).toFixed(4))
-      return { source: "PChome", name, price, id, href, ml, box, qty, pricePerMl }
+      return { source: "PChome", name, price, id, href, ml, box, qty, totalQty, pricePerMl }
     } catch (e) {
       return null
     }
@@ -103,7 +104,7 @@ function hash(str, salt = 'salt') {
           totalQty = parseInt(name.match(/共(\d+)入/)[1])
         } catch (e) { }
         let pricePerMl = parseFloat((price / (ml * totalQty)).toFixed(4))
-        return { source: "momo", name, price, id, href, ml, box, qty, pricePerMl }
+        return { source: "momo", name, price, id, href, ml, box, qty, totalQty, pricePerMl }
       } catch (e) {
         return null
       }
@@ -120,9 +121,8 @@ function hash(str, salt = 'salt') {
     .filter(x => !['Zero', 'zero', '纖維', '纖維+', '芬達', '雪碧', '無糖', '零卡', '+', '綠茶', 'Qoo'].some(y => x.name.includes(y)))
     .sort((a, b) => a.pricePerMl - b.pricePerMl)
   console.log(`🔍 ${result.length} results`)
-  fs.mkdirSync('./dist', { recursive: true });
+  fs.copySync('./public', './dist')
   fs.mkdirSync('./dist/history', { recursive: true });
-  fs.copyFileSync('./public/index.html', './dist/index.html')
   fs.writeFileSync('./dist/result.json', JSON.stringify(result))
 
   let historyFileName = `${new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' }).split(' ')[0].replace(/\//g, '-')}.json`

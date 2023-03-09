@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/gnehs/cola-price-tracker#readme",
   "dependencies": {
+    "fs-extra": "^11.1.0",
     "node-fetch": "^3.3.0",
     "puppeteer": "^19.6.1",
     "puppeteer-extra": "^3.3.4",
