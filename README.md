@@ -1,6 +1,5 @@
-# cola-price-tracker
-🍜 台灣五之神限定通知
+# 可樂價格追蹤器
 
-本程式透過擷取 Instagram 來獲取五之神的最新貼文。
+追蹤台灣主要電商的可口可樂價格，並計算出每毫升最低價格，讓您在購買可口可樂時可以享受最優惠的價格！
 
-https://gnehs.github.io/gonokamitw-feed/
+https://cola.gnehs.net/
