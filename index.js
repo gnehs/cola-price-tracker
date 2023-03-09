@@ -143,6 +143,31 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   console.log(`🗄\t家樂福 ${carrefour.length} results`)
   result = result.concat(carrefour)
 
+  // get 東森購物 result
+  await page.goto(`https://www.etmall.com.tw/Search?keyword=${encodeURIComponent(keyword)}`);
+  let etmall = await page.evaluate(() => [...document.querySelectorAll('.n-card__box')].map(x => {
+    try {
+      let name = x.querySelector(`.n-pic`).getAttribute('title')
+      let price = parseInt(x.querySelector('.n-price__wrap').innerText.replace(/\$|\(售價已折\)/g, ''))
+      let id = x.querySelector(`.n-pic`).getAttribute('href').split('/').pop()
+      let href = `https://www.etmall.com.tw` + x.querySelector(`.n-pic`).getAttribute('href')
+      let ml = parseInt(name.match(/(\d+)ml?L?/)[1])
+      let box = 1
+      try {
+        box = parseInt(name.match(/(\d+)(箱|組)/)[1])
+      } catch (e) { }
+      let qty = parseInt(name.match(/(\d+)入/)[1])
+      let totalQty = box * qty
+      let pricePerMl = parseFloat((price / (ml * box * qty)).toFixed(4))
+      return { source: "東森購物", name, price, id, href, ml, box, qty, totalQty, pricePerMl }
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }))
+  console.log(`🗄\t東森購物 ${etmall.length} results`)
+  result = result.concat(etmall)
+
   // build result
   result = result
     .filter(x => x)
