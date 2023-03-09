@@ -35,11 +35,11 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   // get IP
   await page.goto('https://www.whatismyip.com.tw/', { waitUntil: 'networkidle2' });
   let ip = await page.evaluate(() => document.querySelector('[data-ip]').getAttribute('data-ip'))
-  console.log(`IP: ${ip}`)
+  console.log(`IP\t${ip}`)
   // get UA
   await page.goto('https://www.whatismybrowser.com/detect/what-is-my-user-agent', { waitUntil: 'networkidle2' });
   let ua = await page.evaluate(() => document.querySelector('#detected_value').innerText)
-  console.log(`UA: ${ua}`)
+  console.log(`UA\t${ua}`)
   async function scrollToBottom(page) {
     await page.evaluate(async () => {
       await new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   let result = []
   let keyword = '可口可樂'
   // get PChome result
-  console.log(`🔍 search ${keyword} on PChome`)
+  console.log(`🔍\tsearch ${keyword} on PChome`)
   await page.goto(`https://ecshweb.pchome.com.tw/search/v3.3/?q=${encodeURIComponent(keyword)}&scope=all`, { waitUntil: 'networkidle2' });
   await scrollToBottom(page)
   let pchome = await page.evaluate(() => [...document.querySelectorAll('.col3f[id]')].map(x => {
@@ -84,11 +84,11 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       return null
     }
   }))
-  console.log(`🗄 PChome ${pchome.length} results`)
+  console.log(`🗄\tPChome ${pchome.length} results`)
   result = result.concat(pchome)
 
   // get momo result
-  console.log(`🔍 search ${keyword} on momo`)
+  console.log(`🔍\tsearch ${keyword} on momo`)
   for (let i = 1; i < 3; i++) {
     await page.goto(`https://m.momoshop.com.tw/search.momo?searchKeyword=${encodeURIComponent(keyword)}&curPage=${i}`);
     await delay(3000)
@@ -117,10 +117,10 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     result = result.concat(momo)
     if (momo.length === 0) break
   }
-  console.log(`🗄 momo ${result.length} results`)
+  console.log(`🗄\tmomo ${result.length} results`)
 
   // get carrefour result
-  console.log(`🔍 search ${keyword} on 家樂福`)
+  console.log(`🔍\tsearch ${keyword} on 家樂福`)
   await page.goto(`https://online.carrefour.com.tw/zh/search/?q=${encodeURIComponent(keyword)}&start=0`);
   let carrefour = await page.evaluate(() => [...document.querySelectorAll('.hot-recommend-item')].map(x => {
     let name = x.querySelector('.commodity-desc>div:nth-child(1)').innerText
@@ -140,7 +140,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       return null
     }
   }))
-  console.log(`🗄 家樂福 ${carrefour.length} results`)
+  console.log(`🗄\t家樂福 ${carrefour.length} results`)
   result = result.concat(carrefour)
 
   // build result
@@ -149,7 +149,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     .filter(x => ['可口可樂'].some(y => x.name.includes(y)))
     .filter(x => !['Zero', 'zero', '纖維', '纖維+', '芬達', '雪碧', '無糖', '零卡', '+', '綠茶', 'Qoo'].some(y => x.name.includes(y)))
     .sort((a, b) => a.pricePerMl - b.pricePerMl)
-  console.log(`🔍 ${result.length} results`)
+  console.log(`🔍\t${result.length} results`)
   fs.copySync('./public', './dist')
   fs.mkdirSync('./dist/history', { recursive: true });
   fs.writeFileSync('./dist/result.json', JSON.stringify(result))
