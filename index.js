@@ -172,7 +172,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   result = result
     .filter(x => x)
     .filter(x => ['可口可樂'].some(y => x.name.includes(y)))
-    .filter(x => !['Zero', 'zero', '纖維', '纖維+', '芬達', '雪碧', '無糖', '零卡', '+', '綠茶', 'Qoo'].some(y => x.name.includes(y)))
+    .filter(x => !['zero', '纖維', '纖維+', '芬達', '雪碧', '無糖', '零卡', '+', '綠茶', 'qoo'].some(y => x.name.toLowerCase().includes(y)))
     .sort((a, b) => a.pricePerMl - b.pricePerMl)
   console.log(`🔍\t${result.length} results`)
   fs.copySync('./public', './dist')
