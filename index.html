@@ -88,9 +88,12 @@
 
     const App = (props) => {
       const [feed, setFeed] = useState([]);
+      const [colaFilter, setColaFilter] = useState('all');
+      const [mlFilter, setMlFilter] = useState([]);
       useEffect(() => {
         (async () => {
           const data = await (await fetch('https://cola.gnehs.net/result.json')).json();
+          setMlFilter([...new Set(data.map(item => item.ml))].sort((a, b) => a - b).map(x => `${x}ml`));
           setFeed(data);
         })()
       }, []);
@@ -107,8 +110,21 @@
       </div>
       <div class="ts-container is-very-narrow">
         <div class="ts-space"></div>
+        <label class="ts-chip is-toggle">
+          <input type="radio" name="ml" value="all" onclick="${() => setColaFilter('all')}" checked="${colaFilter == 'all'}" />
+          <div class="content">全部</div>
+        </label>
+        ${mlFilter.map(x => html`
+        <label class="ts-chip is-toggle" style="margin-left: 4px">
+          <input type="radio" name="ml" value="${x}" onclick="${() => setColaFilter(x)}" checked="${colaFilter == x}" />
+          <div class="content">${x}</div>
+        </label>
+        `)}
+        <div class="ts-space"></div>
         ${feed.length
-          ? feed.map((x, i) => html`<${feedItem} ...${x} index="${i}" />`)
+          ? feed
+            .filter(x => colaFilter == 'all' || x.ml == colaFilter.replace('ml', ''))
+            .map((x, i) => html`<${feedItem} ...${x} index="${i}" />`)
           : html`<div class="ts-center"><div class="ts-loading is-notched"></div></div>`}
         <div class="ts-space"></div>
       </div>
