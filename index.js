@@ -52,7 +52,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
           // log(`🖱 ${scrollHeight}`)
           clearInterval(timer);
           resolve();
-        }, 5000);
+        }, 10000);
       });
     });
   }
@@ -126,7 +126,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     let name = x.querySelector('.commodity-desc>div:nth-child(1)').innerText
     let price = parseInt(x.querySelector('.current-price').innerText.replace('$', ''))
     let id = x.querySelector(`.gtm-product-alink`).getAttribute('data-pid')
-    let href = x.querySelector(`.gtm-product-alink`).getAttribute('href')
+    let href = `https://online.carrefour.com.tw` + x.querySelector(`.gtm-product-alink`).getAttribute('href')
     try {
       let l = name.match(/(\d+)L/)
       let ml = parseInt(l ? l[1] * 1000 : name.match(/(\d+)ml/)[1])
