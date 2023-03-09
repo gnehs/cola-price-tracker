@@ -119,6 +119,30 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   }
   console.log(`🗄 momo ${result.length} results`)
 
+  // get carrefour result
+  console.log(`🔍 search ${keyword} on 家樂福`)
+  await page.goto(`https://online.carrefour.com.tw/zh/search/?q=${encodeURIComponent(keyword)}&start=0`);
+  let carrefour = await page.evaluate(() => [...document.querySelectorAll('.hot-recommend-item')].map(x => {
+    let name = x.querySelector('.commodity-desc>div:nth-child(1)').innerText
+    let price = parseInt(x.querySelector('.current-price').innerText.replace('$', ''))
+    let id = x.querySelector(`.gtm-product-alink`).getAttribute('data-pid')
+    let href = x.querySelector(`.gtm-product-alink`).getAttribute('href')
+    try {
+      let l = name.match(/(\d+)L/)
+      let ml = parseInt(l ? l[1] * 1000 : name.match(/(\d+)ml/)[1])
+      let box = 1
+      let qty = parseInt(x.querySelector(`.packageQty`)?.innerText.replace('入', '')) || 1
+      let totalQty = box * qty
+      let pricePerMl = parseFloat((price / (ml * box * qty)).toFixed(4))
+      return { source: "家樂福線上購物", name, price, id, href, ml, box, qty, totalQty, pricePerMl }
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }))
+  console.log(`🗄 家樂福 ${carrefour.length} results`)
+  result = result.concat(carrefour)
+
   // build result
   result = result
     .filter(x => x)
