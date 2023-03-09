@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五之神製作所 台灣 IG</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous"
+    referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      color: #333;
+      background-color: #f2f2f2;
+      line-height: 1.5em;
+      font-family: 'Lato', 'Noto Sans TC', sans-serif;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .loader {
+      margin-top: 50px;
+      font-size: 36px;
+    }
+
+    .container {
+      width: min(512px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .post {
+      background-color: #fff;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+    .post .header {
+      padding: 16px;
+    }
+
+    .post img {
+      width: 100%;
+    }
+
+    .post .meta {
+      padding: 4px 16px;
+      opacity: .75;
+    }
+
+    .post .meta span:not(:first-child)::before {
+      content: '．';
+      margin: 0 2px;
+      opacity: .5;
+    }
+
+    .post .content {
+      padding: 16px;
+      padding-top: 0;
+    }
+
+    .show-all {
+      padding: 16px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 18px;
+      opacity: .75;
+    }
+
+    .btn {
+      all: unset;
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      opacity: .75;
+      transition: all .1s ease-in-out;
+    }
+
+    .btn:not(.btn--active):hover {
+      opacity: 1;
+      background-color: rgba(255, 255, 255, .5);
+    }
+
+    .btn.btn--active {
+      background-color: #fff;
+      opacity: 1;
+    }
+
+    .btn+.btn {
+      margin-left: 4px;
+    }
+  </style>
+</head>
+
+<body style="display: none;">
+  <div id="app">
+    <div v-if="posts.length" class="container">
+      <h1>
+        <a href="https://www.instagram.com/gonokamitw/" target="_blank">
+          五之神製作所 台灣
+        </a>
+      </h1>
+      <code>https://gnehs.github.io/gonokamitw-feed/posts.json</code>
+      <br>
+      <code>https://gnehs.github.io/gonokamitw-feed/okuyama_posts.json</code>
+      <br>
+      <br>
+      <button class="btn" @click="showProfile = 'gonokamitw'" :class="{ 'btn--active': showProfile == 'gonokamitw' }">
+        五之神製作所 台灣
+      </button>
+      <button class="btn" @click="showProfile = 'gonokami_okuyama'" :class="{ 'btn--active': showProfile == 'gonokami_okuyama' }">
+        奥山直人　五之神製作所 台湾
+      </button>
+      <div v-for="post in (showProfile=='gonokamitw' ? posts : okuyama_posts).slice(0, showAll ? undefined : 10)" class="post" :id="post.id">
+        <div class="header">
+          <a :href="post.authorLink" target="_blank">
+            {{post.author}}
+          </a>
+        </div>
+        <img :src="post.img" />
+        <div class="meta">
+          <span><i class='bx bx-like'></i> {{ post.likes }}</span>
+          <span><i class='bx bx-comment'></i> {{ post.comments }}</span>
+          <span><i class='bx bx-time'></i> {{ post.time }}</span>
+          <span v-if="post.isLimitedRamen"><i class='bx bx-fork'></i> {{ post.limitRamenName }}</span>
+        </div>
+        <div class="content" v-html="post.description"></div>
+      </div>
+
+      <div class="show-all" v-if="!showAll" @click="showAll = true">
+        <i class='bx bx-chevron-down'></i>
+        <span>顯示更多</span>
+      </div>
+    </div>
+    <div v-if="!posts.length" class="text-center loader">
+      <i class='bx bx-loader-alt bx-spin'></i>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+    createApp({
+      created() {
+        document.body.style.display = 'block'
+        fetch('https://gnehs.github.io/gonokamitw-feed/posts.json')
+          .then(response => response.json())
+          .then(x => {
+            this.posts = x.map(x => {
+              x.img = `https://gnehs.github.io/gonokamitw-feed` + x.img
+              x.description = x.description.replace(/\n/g, '<br>')
+              x.author = '五之神製作所 台灣'
+              x.authorLink = 'https://www.instagram.com/gonokamitw/'
+              return x
+            })
+          })
+        fetch('https://gnehs.github.io/gonokamitw-feed/okuyama_posts.json')
+          .then(response => response.json())
+          .then(x => {
+            this.okuyama_posts = x.map(x => {
+              x.img = `https://gnehs.github.io/gonokamitw-feed` + x.img
+              x.description = x.description.replace(/\n/g, '<br>')
+              x.author = '奥山直人　五之神製作所 台湾'
+              x.authorLink = 'https://www.instagram.com/gonokami_okuyama/'
+              return x
+            })
+          })
+      },
+      data() {
+        return {
+          posts: null,
+          okuyama_posts: null,
+          showProfile: `gonokamitw`,
+          showAll: false
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+
+</html>

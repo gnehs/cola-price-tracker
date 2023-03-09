@@ -1,0 +1,27 @@
+{
+  "name": "cola-price-tracker",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "可口可樂價格追蹤器",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gnehs/cola-price-tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gnehs/cola-price-tracker/issues"
+  },
+  "homepage": "https://github.com/gnehs/cola-price-tracker#readme",
+  "dependencies": {
+    "node-fetch": "^3.3.0",
+    "puppeteer": "^19.6.1",
+    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra-plugin-stealth": "^2.11.1"
+  }
+}
