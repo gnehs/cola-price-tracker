@@ -49,7 +49,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
         }, 100);
         setTimeout(() => {
           let scrollHeight = document.body.scrollHeight;
-          log(`🖱 ${scrollHeight}`)
+          // log(`🖱 ${scrollHeight}`)
           clearInterval(timer);
           resolve();
         }, 5000);
@@ -79,12 +79,12 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       let qty = parseInt(name.match(/(\d+)入/)[1])
       let totalQty = box * qty
       let pricePerMl = parseFloat((price / (ml * box * qty)).toFixed(4))
-      return { source: "PChome", name, price, id, href, ml, box, qty, totalQty, pricePerMl }
+      return { source: "PChome 24h 購物", name, price, id, href, ml, box, qty, totalQty, pricePerMl }
     } catch (e) {
       return null
     }
   }))
-  console.log(`🔍 PChome ${pchome.length} results`)
+  console.log(`🗄 PChome ${pchome.length} results`)
   result = result.concat(pchome)
 
   // get momo result
@@ -109,7 +109,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
           totalQty = parseInt(name.match(/共(\d+)入/)[1])
         } catch (e) { }
         let pricePerMl = parseFloat((price / (ml * totalQty)).toFixed(4))
-        return { source: "momo", name, price, id, href, ml, box, qty, totalQty, pricePerMl }
+        return { source: "momo 購物網", name, price, id, href, ml, box, qty, totalQty, pricePerMl }
       } catch (e) {
         return null
       }
@@ -117,7 +117,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     result = result.concat(momo)
     if (momo.length === 0) break
   }
-  console.log(`🔍 momo ${result.length} results`)
+  console.log(`🗄 momo ${result.length} results`)
 
   // build result
   result = result
