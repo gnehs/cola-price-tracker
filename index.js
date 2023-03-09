@@ -10,6 +10,7 @@ function hash(str, salt = 'salt') {
   hash.update(str.toString() + salt, 'utf8')
   return hash.digest('hex').slice(0, 8)
 }
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 (async () => {
   // Add stealth plugin and use defaults (all evasion techniques)
@@ -89,7 +90,8 @@ function hash(str, salt = 'salt') {
   // get momo result
   console.log(`🔍 search ${keyword} on momo`)
   for (let i = 1; i < 3; i++) {
-    await page.goto(`https://m.momoshop.com.tw/search.momo?searchKeyword=${encodeURIComponent(keyword)}&curPage=${i}`, { waitUntil: 'networkidle2' });
+    await page.goto(`https://m.momoshop.com.tw/search.momo?searchKeyword=${encodeURIComponent(keyword)}&curPage=${i}`);
+    await delay(3000)
     let momo = await page.evaluate(() => [...document.querySelectorAll('.prdListArea .goodsItemLi')].map(x => {
       let name = x.querySelector('.prdName').innerText
       let price = parseInt(x.querySelector('.priceSymbol .price').innerText)
