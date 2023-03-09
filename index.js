@@ -70,7 +70,10 @@ function hash(str, salt = 'salt') {
       let ml = parseInt(name.match(/(\d+)ml/)[1])
       let box = 1
       try {
-        box = parseInt(name.match(/x?X?(\d+)(箱|組)?/)[1])
+        box = parseInt(name.match(/(\d+)(箱|組)/)[1])
+      } catch (e) { }
+      try {
+        box = parseInt(name.match(/X?x?(\d+)$/)[1])
       } catch (e) { }
       let qty = parseInt(name.match(/(\d+)入/)[1])
       let totalQty = box * qty
