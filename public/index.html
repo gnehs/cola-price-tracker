@@ -54,7 +54,7 @@
       return html`
         <a class="ts-box" href="${props.href}" target="_blank">
           <div class="ts-content">
-            <div class="ts-text is-description">${props.source == 'momo' ? 'momo 購物網' : 'PChome 24h 購物'}</div>
+            <div class="ts-text is-description">${props.source}</div>
             <div class="ts-header is-truncated is-heavy">
               ${props.name}
               ${props.index == 0 && html`<span class="ts-badge is-start-spaced">價格最低</span>`}
