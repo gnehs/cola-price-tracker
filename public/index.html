@@ -110,12 +110,12 @@
       </div>
       <div class="ts-container is-very-narrow">
         <div class="ts-space"></div>
-        <label class="ts-chip is-toggle">
+        <label class="ts-chip is-toggle" style="margin-right: 4px;margin-bottom: 4px;">
           <input type="radio" name="ml" value="all" onclick="${() => setColaFilter('all')}" checked="${colaFilter == 'all'}" />
           <div class="content">全部</div>
         </label>
         ${mlFilter.map(x => html`
-        <label class="ts-chip is-toggle" style="margin-left: 4px">
+        <label class="ts-chip is-toggle" style="margin-right: 4px;margin-bottom: 4px;">
           <input type="radio" name="ml" value="${x}" onclick="${() => setColaFilter(x)}" checked="${colaFilter == x}" />
           <div class="content">${x}</div>
         </label>
