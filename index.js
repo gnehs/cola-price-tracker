@@ -94,7 +94,7 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     await delay(3000)
     let momo = await page.evaluate(() => [...document.querySelectorAll('.prdListArea .goodsItemLi')].map(x => {
       let name = x.querySelector('.prdName').innerText
-      let price = parseInt(x.querySelector('.priceSymbol .price').innerText)
+      let price = parseInt(x.querySelector('.priceSymbol .price').innerText.replace(/,/g, ''))
       let id = x.querySelector('#viewProdId').value
       let href = `https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=${id}`
       try {
